@@ -1,0 +1,50 @@
+name = "afrotoon-api"
+main = "src/index.ts"
+compatibility_date = "2024-07-11"
+compatibility_flags = ["nodejs_compat"]
+node_compat = true
+
+[build]
+command = "npm run build"
+
+[vars]
+ENVIRONMENT = "production"
+JWT_ACCESS_EXPIRY = "15m"
+JWT_REFRESH_EXPIRY = "7d"
+RATE_LIMIT_REQUESTS = "100"
+RATE_LIMIT_WINDOW_MS = "900000"
+
+# These will be set via wrangler secret put or dashboard
+# DATABASE_URL = ""
+# JWT_SECRET = ""
+# ENCRYPTION_KEY = ""
+# MINIO_ENDPOINT = ""
+# MINIO_ACCESS_KEY = ""
+# MINIO_SECRET_KEY = ""
+# MINIO_BUCKET = ""
+# MINIO_PUBLIC_URL = ""
+# AI_SERVICE_URL = ""
+# AI_SERVICE_TOKEN = ""
+# CLIENT_URL = ""
+# GOOGLE_CLIENT_ID = ""
+# GOOGLE_CLIENT_SECRET = ""
+# GITHUB_CLIENT_ID = ""
+# GITHUB_CLIENT_SECRET = ""
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "adamae"
+preview_bucket_name = "adamae-preview"
+
+[durable_objects]
+bindings = [
+  { name = "RATE_LIMITER", class_name = "RateLimiter" }
+]
+
+[triggers]
+crons = ["0 * * * *"]

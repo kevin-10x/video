@@ -6,6 +6,8 @@
     "client",
     "server",
     "ai",
+    "workers/api",
+    "workers/api-consumer",
     "shared"
   ],
   "scripts": {
@@ -13,12 +15,18 @@
     "dev:client": "npm run dev --workspace=client",
     "dev:server": "npm run dev --workspace=server",
     "dev:ai": "npm run dev --workspace=ai",
+    "dev:cf-api": "npm run dev --workspace=workers/api",
+    "dev:cf-consumer": "npm run dev --workspace=workers/api-consumer",
     "build": "npm run build --workspaces",
     "db:generate": "npm run db:generate --workspace=server",
     "db:push": "npm run db:push --workspace=server",
     "db:studio": "npm run db:studio --workspace=server",
     "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
-    "docker:down": "docker-compose -f docker/docker-compose.yml down"
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "cf:deploy": "./scripts/deploy-cloudflare.sh preview",
+    "cf:deploy:prod": "./scripts/deploy-cloudflare.sh production",
+    "cf:login": "wrangler login",
+    "cf:secret": "wrangler secret put"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

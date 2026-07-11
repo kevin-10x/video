@@ -1,0 +1,22 @@
+name = "afrotoon-api-consumer"
+main = "src/index.ts"
+compatibility_date = "2024-07-11"
+compatibility_flags = ["nodejs_compat"]
+node_compat = true
+
+[vars]
+ENVIRONMENT = "production"
+
+[[queues.consumers]]
+queue = "ai-jobs"
+max_batch_size = 5
+max_batch_timeout = 30000
+max_retries = 3
+dead_letter_queue = "ai-jobs-dlq"
+
+[[durable_objects.bindings]]
+name = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+[ai]
+binding = "AI"
