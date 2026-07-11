@@ -8,6 +8,10 @@ dist/
 build/
 .next/
 out/
+vercel-output/
+
+# Cloudflare Pages
+.vercel-output/
 
 # Environment files
 .env
