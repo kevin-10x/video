@@ -307,8 +307,8 @@ export default function VideoToCartoonPage() {
                   <span className="text-sm">Replace background</span>
                 </label>
                 {replaceBackground && (
-                  <Select value={backgroundStyle} onValueChange={setBackgroundStyle} className="w-48">
-                    <SelectTrigger>
+                  <Select value={backgroundStyle} onValueChange={setBackgroundStyle}>
+                    <SelectTrigger className="w-48">
                       <SelectValue placeholder="Background style" />
                     </SelectTrigger>
                     <SelectContent>
