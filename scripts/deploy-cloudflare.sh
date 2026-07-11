@@ -49,9 +49,9 @@ npm run build:cf
 
 echo "📦 Deploying to Cloudflare Pages..."
 if [ "$ENV" = "production" ]; then
-    npx wrangler pages deploy ./vercel-output --project-name=afrotoon-frontend --branch=main
+    npx wrangler pages deploy .vercel-output --project-name=afrotoon-frontend --branch=main
 else
-    npx wrangler pages deploy ./vercel-output --project-name=afrotoon-frontend-preview --branch=preview
+    npx wrangler pages deploy .vercel-output --project-name=afrotoon-frontend-preview --branch=preview
 fi
 
 echo "✅ Deployment complete!"
