@@ -1,0 +1,187 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: adamae-postgres-prod
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - adamae-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: adamae-redis-prod
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - adamae-network
+
+  minio:
+    image: minio/minio:latest
+    container_name: adamae-minio-prod
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - adamae-network
+
+  server:
+    image: ${REGISTRY}/${IMAGE_NAME}-server:${TAG:-latest}
+    container_name: adamae-server-prod
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      REDIS_URL: redis://redis:6379
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      MINIO_PUBLIC_URL: https://${MINIO_PUBLIC_DOMAIN}/${MINIO_BUCKET}
+      MINIO_USE_SSL: "true"
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_EXPIRY: "15m"
+      JWT_REFRESH_EXPIRY: "7d"
+      NODE_ENV: production
+      PORT: 3001
+      API_URL: https://${API_DOMAIN}
+      CLIENT_URL: https://${CLIENT_DOMAIN}
+      AI_SERVICE_URL: http://ai:8000
+      AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      EMAIL_FROM: ${EMAIL_FROM}
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - adamae-network
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  ai:
+    image: ${REGISTRY}/${IMAGE_NAME}-ai:${TAG:-latest}
+    container_name: adamae-ai-prod
+    environment:
+      REDIS_URL: redis://redis:6379
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      MINIO_USE_SSL: "true"
+      DEVICE: ${AI_DEVICE:-cpu}
+      PYTHONUNBUFFERED: 1
+      AI_SERVICE_TOKEN: ${AI_SERVICE_TOKEN}
+      MAX_CONCURRENT_JOBS: ${MAX_CONCURRENT_JOBS:-2}
+      MODEL_CACHE_DIR: /app/models
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - adamae-network
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+    volumes:
+      - ai_models:/app/models
+
+  client:
+    image: ${REGISTRY}/${IMAGE_NAME}-client:${TAG:-latest}
+    container_name: adamae-client-prod
+    environment:
+      NEXT_PUBLIC_API_URL: https://${API_DOMAIN}
+      NEXT_PUBLIC_AI_URL: https://${AI_DOMAIN}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    restart: unless-stopped
+    networks:
+      - adamae-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: adamae-nginx-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+    depends_on:
+      - client
+      - server
+      - ai
+    restart: unless-stopped
+    networks:
+      - adamae-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: adamae-certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done'"
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  ai_models:
+
+networks:
+  adamae-network:
+    driver: bridge
