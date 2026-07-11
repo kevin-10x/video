@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, User, MapPin, Shirt, Gem, Music, Video, Loader2, Palette, Layers, Smile, Heart, Sun, Tree2, Building2, Drum, Zap } from 'lucide-react';
+import { Sparkles, User, MapPin, Shirt, Gem, Music, Video, Loader2, Palette, Layers, Smile, Heart, Sun, Trees, Building2, Drum, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Button } from '@/components/ui/Button';
