@@ -1,9 +1,8 @@
 # Cloudflare Pages Build Configuration
-# This file tells Pages how to build your Next.js app
 
 [build]
-command = "cd client && npm run build"
-directory = "client/vercel-output"
+command = "cd client && npm run build:cf"
+directory = "client/.vercel-output"
 root = ""
 
 [build.environment]
