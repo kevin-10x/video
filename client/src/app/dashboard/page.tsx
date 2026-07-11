@@ -65,28 +65,28 @@ export default function DashboardPage() {
           <StatCard
             title="Total Projects"
             value="12"
-            change="+2 this month"
+            change={16}
             icon={Video}
             variant="primary"
           />
           <StatCard
             title="Completed Videos"
             value="8"
-            change="+3 this week"
+            change={60}
             icon={CheckCircle}
             variant="success"
           />
           <StatCard
             title="Processing"
             value="2"
-            change="In progress"
+            change={0}
             icon={Clock}
             variant="warning"
           />
           <StatCard
             title="Credits Remaining"
             value="847"
-            change="Resets in 15 days"
+            change={-5}
             icon={TrendingUp}
             variant="info"
           />
