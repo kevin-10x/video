@@ -51,7 +51,7 @@ export function CreditBalance() {
         />
       </div>
       <p className="text-xs text-muted-foreground mt-1 text-right">
-        Resets in {user?.creditsResetAt ? formatRelativeTime(user.creditsResetAt) : '30 days'}
+        Resets in {(user as any)?.creditsResetAt ? formatRelativeTime((user as any).creditsResetAt) : '30 days'}
       </p>
     </div>
   );
