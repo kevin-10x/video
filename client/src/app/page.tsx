@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Video, Zap, Globe, Users, Sparkles, ArrowRight, PlayCircle } from 'lucide-react';
+import { Video, Zap, Globe, Users, Sparkles, ArrowRight, PlayCircle, Home, Crown, Shield, Palette, Shirt, Mask } from 'lucide-react';
 
 const features = [
   {
@@ -37,12 +37,12 @@ const features = [
 ];
 
 const africanStyles = [
-  { name: 'Maasai', region: 'East Africa', icon: '🏕️' },
-  { name: 'Yoruba', region: 'West Africa', icon: '👑' },
-  { name: 'Zulu', region: 'Southern Africa', icon: '🛡️' },
-  { name: 'Kente', region: 'Ghana', icon: '🎨' },
-  { name: 'Ankara', region: 'Nigeria', icon: '👗' },
-  { name: 'Dashiki', region: 'West Africa', icon: '🎭' },
+  { name: 'Maasai', region: 'East Africa', icon: Home },
+  { name: 'Yoruba', region: 'West Africa', icon: Crown },
+  { name: 'Zulu', region: 'Southern Africa', icon: Shield },
+  { name: 'Kente', region: 'Ghana', icon: Palette },
+  { name: 'Ankara', region: 'Nigeria', icon: Shirt },
+  { name: 'Dashiki', region: 'West Africa', icon: Mask },
 ];
 
 export default function HomePage() {
@@ -165,7 +165,9 @@ export default function HomePage() {
                   key={style.name}
                   className="group p-6 rounded-2xl bg-background border border-border/50 hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/10 transition-all duration-300 text-center"
                 >
-                  <div className="text-4xl mb-3">{style.icon}</div>
+                  <div className="text-4xl mb-3">
+                    <style.icon className="w-10 h-10 mx-auto text-primary-500" />
+                  </div>
                   <h3 className="font-display text-lg font-bold text-foreground mb-1">{style.name}</h3>
                   <p className="text-sm text-muted-foreground">{style.region}</p>
                 </div>
