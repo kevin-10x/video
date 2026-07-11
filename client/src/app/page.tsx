@@ -1,7 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { Video, Zap, Globe, Users, Sparkles, ArrowRight, PlayCircle, Home, Crown, Shield, Palette, Shirt, Mask } from 'lucide-react';
+import {
+  Video,
+  Zap,
+  Globe,
+  Users,
+  Sparkles,
+  ArrowRight,
+  PlayCircle,
+  Home,
+  Crown,
+  Shield,
+  Palette,
+  Shirt,
+  Mask,
+} from 'lucide-react';
 
 const features = [
   {
