@@ -184,7 +184,7 @@ export default function HomePage() {
                   Video to Cartoon in Minutes
                 </h2>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Upload any video and our AI will transform it into a cartoon while preserving motion, 
+                  Upload any video and our AI will transform it into a cartoon while preserving motion,
                   lip-sync, and expressions. Choose from 15+ animation styles including our exclusive African pack.
                 </p>
                 <ul className="space-y-3 mb-8">
