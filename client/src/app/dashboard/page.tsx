@@ -127,6 +127,7 @@ const mockProjects = [
     thumbnail: null,
     duration: 30,
     createdAt: new Date(Date.now() - 86400000).toISOString(),
+    updatedAt: new Date(Date.now() - 86400000).toISOString(),
     progress: 100,
   },
   {
@@ -138,6 +139,7 @@ const mockProjects = [
     thumbnail: null,
     duration: 45,
     createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3600000).toISOString(),
     progress: 65,
   },
   {
@@ -149,6 +151,7 @@ const mockProjects = [
     thumbnail: null,
     duration: 60,
     createdAt: new Date(Date.now() - 172800000).toISOString(),
+    updatedAt: new Date(Date.now() - 172800000).toISOString(),
     progress: 100,
   },
   {
@@ -160,6 +163,7 @@ const mockProjects = [
     thumbnail: null,
     duration: 0,
     createdAt: new Date(Date.now() - 259200000).toISOString(),
+    updatedAt: new Date(Date.now() - 259200000).toISOString(),
     progress: 0,
   },
 ];
