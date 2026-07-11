@@ -1,0 +1,12 @@
+{
+  "name": "afrotoon-frontend",
+  "pages_build_output_dir": "client/.vercel-output",
+  "compatibility_date": "2024-07-11",
+  "build": {
+    "command": "cd client && npm run build:cf",
+    "cwd": "client"
+  },
+  "env": {
+    "NEXT_TELEMETRY_DISABLED": "1"
+  }
+}

@@ -12,8 +12,7 @@
     "dev:client": "npm run dev --workspace=client",
     "dev:cf-api": "npm run dev --workspace=workers/api",
     "build": "npm run build --workspaces",
-    "cf:deploy": "./scripts/deploy-cloudflare.sh preview",
-    "cf:deploy:prod": "./scripts/deploy-cloudflare.sh production"
+    "build:client": "npm run build --workspace=client"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
