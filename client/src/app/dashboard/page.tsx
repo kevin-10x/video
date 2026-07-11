@@ -10,7 +10,7 @@ import { StatCard } from '@/components/StatCard';
 import { QuickActions } from '@/components/QuickActions';
 import { RecentActivity } from '@/components/RecentActivity';
 import { CreditBalance } from '@/components/CreditBalance';
-import { Users, Video, Image, Download, TrendingUp, Clock, AlertCircle, CheckCircle, Plus } from 'lucide-react';
+import { Users, Video, Image, Download, TrendingUp, Clock, AlertCircle, CheckCircle, Plus, LayoutDashboard, Box, Settings } from 'lucide-react';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -169,7 +169,7 @@ const mockProjects = [
 ];
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Projects', href: '/dashboard/projects', icon: Video },
   { name: 'African Studio', href: '/dashboard/african-studio', icon: Image },
   { name: 'Assets', href: '/dashboard/assets', icon: Box },
