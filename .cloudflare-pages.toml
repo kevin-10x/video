@@ -1,0 +1,23 @@
+# Cloudflare Pages Build Configuration
+# This file tells Pages how to build your Next.js app
+
+[build]
+command = "cd client && npm run build"
+directory = "client/vercel-output"
+root = ""
+
+[build.environment]
+NEXT_TELEMETRY_DISABLED = "1"
+NODE_VERSION = "20"
+
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+from = "/api/*"
+to = "https://afrotoon-api.72e2e322ec1c23d1c20de1f2b0cf8cb5.workers.dev/api/:splat"
+status = 200

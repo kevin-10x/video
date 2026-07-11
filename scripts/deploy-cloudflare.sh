@@ -11,7 +11,7 @@ echo "🚀 Deploying AfroToon AI to Cloudflare ($ENV)..."
 
 # Check wrangler is installed
 if ! command -v wrangler &> /dev/null; then
-    echo "❌ Wrangler not found. Installing..."
+    echo "📦 Installing wrangler..."
     npm install -g wrangler
 fi
 
@@ -21,35 +21,48 @@ if ! wrangler whoami &> /dev/null; then
     wrangler login
 fi
 
-# Build and deploy API Worker
-echo "📦 Building API Worker..."
+# Deploy API Worker
+echo "📦 Deploying API Worker..."
 cd "$ROOT_DIR/workers/api"
 npm ci
-npm run deploy:$ENV
+if [ "$ENV" = "production" ]; then
+    wrangler deploy --env production
+else
+    wrangler deploy
+fi
 
-# Build and deploy AI Consumer Worker
-echo "📦 Building AI Consumer Worker..."
+# Deploy AI Consumer Worker
+echo "🤖 Deploying AI Consumer..."
 cd "$ROOT_DIR/workers/api-consumer"
 npm ci
-npm run deploy:$ENV
+if [ "$ENV" = "production" ]; then
+    wrangler deploy --env production
+else
+    wrangler deploy
+fi
 
-# Build and deploy Frontend to Pages
-echo "📦 Building Frontend for Cloudflare Pages..."
+# Build and Deploy Frontend to Pages
+echo "🌐 Building Frontend for Cloudflare Pages..."
 cd "$ROOT_DIR/client"
 npm ci
-npm run build
-npx wrangler pages deploy ./vercel-output --project-name=afrotoon-frontend --branch=$ENV
+npm run build:cf
+
+echo "📦 Deploying to Cloudflare Pages..."
+if [ "$ENV" = "production" ]; then
+    npx wrangler pages deploy ./vercel-output --project-name=afrotoon-frontend --branch=main
+else
+    npx wrangler pages deploy ./vercel-output --project-name=afrotoon-frontend-preview --branch=preview
+fi
 
 echo "✅ Deployment complete!"
 echo ""
-echo "📋 Deployment Summary ($ENV):"
-echo "   API Worker: https://afrotoon-api.$ENV.your-subdomain.workers.dev"
-echo "   AI Consumer: https://afrotoon-ai-consumer.$ENV.your-subdomain.workers.dev"
-echo "   Frontend: https://afrotoon-frontend.$ENV.pages.dev"
-echo ""
-echo "🔧 Next steps:"
-echo "   1. Set secrets: wrangler secret put JWT_SECRET --env $ENV"
-echo "   2. Set secrets: wrangler secret put DATABASE_URL --env $ENV"
-echo "   3. Set secrets: wrangler secret put MINIO_SECRET_KEY --env $ENV"
-echo "   4. Configure custom domains in Cloudflare Dashboard"
-echo "   5. Set up D1 database: wrangler d1 execute afrotoon-db --file=./database/schema.sql --env=$ENV"
+echo "🔗 Your URLs:"
+if [ "$ENV" = "production" ]; then
+    echo "   Frontend: https://afrotoon-frontend.pages.dev"
+    echo "   API: https://afrotoon-api.your-subdomain.workers.dev"
+    echo "   AI Consumer: https://afrotoon-ai-consumer.your-subdomain.workers.dev"
+else
+    echo "   Frontend: https://afrotoon-frontend-preview.pages.dev"
+    echo "   API: https://afrotoon-api-preview.your-subdomain.workers.dev"
+    echo "   AI Consumer: https://afrotoon-ai-consumer-preview.your-subdomain.workers.dev"
+fi
