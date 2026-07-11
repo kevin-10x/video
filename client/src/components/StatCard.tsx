@@ -8,14 +8,24 @@ interface StatCardProps {
   value: string | number;
   change?: number;
   icon: React.ElementType;
-  color: string;
+  variant?: 'primary' | 'success' | 'warning' | 'info';
+  color?: string;
   description?: string;
 }
 
-export function StatCard({ title, value, change, icon: Icon, color, description }: StatCardProps) {
+export function StatCard({ title, value, change, icon: Icon, variant = 'primary', color, description }: StatCardProps) {
   const isPositive = change && change > 0;
   const isNegative = change && change < 0;
-  
+
+  const variantColors: Record<string, string> = {
+    primary: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400',
+    success: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
+    warning: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400',
+    info: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+  };
+
+  const iconColor = color || variantColors[variant] || variantColors.primary;
+
   return (
     <div className="bg-card border border-border rounded-xl p-6">
       <div className="flex items-start justify-between">
@@ -38,9 +48,9 @@ export function StatCard({ title, value, change, icon: Icon, color, description 
             </div>
           )}
         </div>
-<div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', color)}>
-        <Icon className="w-5 h-5" />
-      </div>
+        <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', iconColor)}>
+          <Icon className="w-5 h-5" />
+        </div>
       </div>
     </div>
   );
