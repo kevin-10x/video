@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { formatDuration, formatFileSize, formatRelativeTime } from '@/lib/utils';
-import { Video, Clock, Download, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Video, Clock, Download, CheckCircle, AlertCircle, Loader2, Sparkles, FileText, Image } from 'lucide-react';
 
 interface ProjectCardProps {
   project: {
