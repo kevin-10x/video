@@ -7,12 +7,12 @@ interface StatCardProps {
   title: string;
   value: string | number;
   change?: number;
-  icon: React.ReactNode;
+  icon: React.ElementType;
   color: string;
   description?: string;
 }
 
-export function StatCard({ title, value, change, icon, color, description }: StatCardProps) {
+export function StatCard({ title, value, change, icon: Icon, color, description }: StatCardProps) {
   const isPositive = change && change > 0;
   const isNegative = change && change < 0;
   
@@ -38,9 +38,9 @@ export function StatCard({ title, value, change, icon, color, description }: Sta
             </div>
           )}
         </div>
-        <div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', color)}>
-          {icon}
-        </div>
+<div className={cn('w-12 h-12 rounded-xl flex items-center justify-center', color)}>
+        <Icon className="w-5 h-5" />
+      </div>
       </div>
     </div>
   );
